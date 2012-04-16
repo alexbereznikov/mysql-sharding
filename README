@@ -1,0 +1,40 @@
+mysql-sharding - mysql database plugin adding the possibility of sharding the database
+
+Quickstart guide
+
+1. Requirements
+
+To compile plugin you need:
+ - mysql 5.5.x source code
+ - GNU Make
+ - GCC
+ - CMake
+ - hiredis library (https://github.com/antirez/hiredis)
+
+2. Compilation on *nix systems
+
+First, you need to unpack mysql source code. Then unpack plugin source to 'storage' directory of mysql source. 
+Now source is ready to compile.
+
+Use cmake for configuring and generating makefiles, for example:
+  mysql-source$ mkdir ../mysql-build && cd ../mysql-build
+  mysql-build$ cmake ../mysql-source
+
+After all, simply type make:
+  mysql-build$ make
+
+Plugin object file will be located at storage/sharding subdirectory of mysql build directory.
+
+3. Installation
+
+You need to copy plugin object file to your mysql plugins directory, usually /usr/local/mysql/lib/plugin.
+Then you would to install plugin - run mysql client:
+
+  ~/$ mysql -u root -p
+	
+At mysql prompt you would type spmething like this:
+
+  > INSTALL PLUGIN sharding SONAME 'ha_sharding.so'
+
+This will install plugin permanently. See http://dev.mysql.com/doc/refman/5.1/en/install-plugin.html for reference.
+
