@@ -27,7 +27,7 @@
 #include "handler.h"                     /* handler */
 #include "my_base.h"                     /* ha_rows */
 
-#include "hiredis.h"			/* interaction with redis */
+#include "RedisConnector.h"			/* interaction with redis */
 
 /** @brief
   EXAMPLE_SHARE is a structure that will be shared among all open handlers.
