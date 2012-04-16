@@ -16,6 +16,7 @@ class SingleNode : public Node
 {
 public:
 	SingleNode();
+	SingleNode(char *source);
 	~SingleNode();
 	
 	/* mysql process command routine */

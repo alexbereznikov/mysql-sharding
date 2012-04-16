@@ -13,6 +13,11 @@ SingleNode::SingleNode()
 	_address = NULL;
 }
 
+SingleNode::SingleNode(char *source)
+{
+	FromString(source);
+}
+
 SingleNode::~SingleNode()
 {
 	

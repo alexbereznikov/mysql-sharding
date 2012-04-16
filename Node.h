@@ -18,6 +18,7 @@ class Node
 {
 public:
 	Node();
+	Node(char*);
 	~Node();
 	
 	/* mysql process command routine */

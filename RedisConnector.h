@@ -8,6 +8,8 @@
 #include <string.h>
 
 #include "hiredis.h"			/* hiredis connector */
+#include "MultiNode.h"
+#include "SingleNode.h"
 
 
 typedef	char* KeyType;			/* Temporary */
@@ -24,8 +26,8 @@ public:
     int		Connect(HostnameType hostname);
     void	Disconnect();
     
-    NodeType	GetNode(KeyType key);
-	int 		SetNode(KeyType key, NodeType node);
+    Node		GetNode(KeyType key);
+	int 		SetNode(KeyType key, Node node);
 	int			DeleteKey(KeyType key);
 private:
     int			_connected;	/* 0 - disconnected, 1 - connected */

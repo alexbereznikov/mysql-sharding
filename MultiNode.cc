@@ -15,6 +15,12 @@ MultiNode::MultiNode()
 	
 }
 
+MultiNode::MultiNode(char *source)
+{
+	FromString(source);
+}
+
+
 MultiNode::~MultiNode()
 {
 	

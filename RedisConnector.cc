@@ -50,7 +50,7 @@ void	RedisConnector::Disconnect()
 	redisFree(_context);
 }
 
-NodeType	RedisConnector::GetNode(KeyType key)
+Node	RedisConnector::GetNode(KeyType key)
 {
 	/* Send command and get a reply */
     redisReply	*reply = (redisReply*)redisCommand(_context, "GET %s", key);
@@ -61,18 +61,17 @@ NodeType	RedisConnector::GetNode(KeyType key)
 		return	0;
 	}
 	/* Extract node information from reply */
-	NodeType node = (NodeType)calloc(strlen(reply->str) + 1, 1);
-	strncpy(node, reply->str, strlen(reply->str));
+	Node node(reply->str);
 	/* Free reply object */
 	freeReplyObject(reply);
 	/* And return node information */
 	return	node;
 }
 
-int	RedisConnector::SetNode(KeyType key, NodeType node)
+int	RedisConnector::SetNode(KeyType key, Node node)
 {
 	/* Send command and get a reply */
-    redisReply	*reply = (redisReply*)redisCommand(_context, "SET %s %s", key, node);
+    redisReply	*reply = (redisReply*)redisCommand(_context, "SET %s %s", key, node.ToString());
 	/* Check whether there was an error */
 	if (reply == NULL)
 	{
