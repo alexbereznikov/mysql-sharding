@@ -13,8 +13,8 @@ To compile plugin you need:
 
 2. Compilation on *nix systems
 
-First, you need to unpack mysql source code. Then unpack plugin source to 'storage' directory of mysql source. 
-Now source is ready to compile.
+First, you need to unpack mysql source code. Then unpack plugin source to 'storage'
+directory of mysql source. Now source is ready to compile.
 
 Use cmake for configuring and generating makefiles, for example:
   mysql-source$ mkdir ../mysql-build && cd ../mysql-build
@@ -27,12 +27,12 @@ Plugin object file will be located at storage/sharding subdirectory of mysql bui
 
 3. Installation
 
-You need to copy plugin object file to your mysql plugins directory, usually /usr/local/mysql/lib/plugin.
-Then you would to install plugin - run mysql client:
+You need to copy plugin object file to your mysql plugins directory, usually 
+/usr/local/mysql/lib/plugin. Then you have to install plugin - run mysql client:
 
   ~/$ mysql -u root -p
 	
-At mysql prompt you would type spmething like this:
+At mysql prompt you would type something like this:
 
   > INSTALL PLUGIN sharding SONAME 'ha_sharding.so'
 
