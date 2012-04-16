@@ -1,7 +1,7 @@
 
-#ifndef	__REDIS_CONNECTOR__
+#ifndef	__REDIS_CONNECTOR_H__
 
-#define	__REDIS_CONNECTOR__
+#define	__REDIS_CONNECTOR_H__
 
 #ifdef USE_PRAGMA_INTERFACE
 #pragma interface			/* gcc class implementation */
