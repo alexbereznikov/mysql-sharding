@@ -22,15 +22,15 @@ public:
 	~Node();
 	
 	/* mysql process command routine */
-	virtual MYSQL_RESULT	ProcessCommand(char *command) = 0;	
+	virtual MYSQL_RESULT	ProcessCommand(char *command);	
 	
 	
 	/* Getting type of node */
-	virtual NodeType	GetType() = 0;
+	virtual NodeType	GetType();
 	/* Getting string representation of node */
-	virtual char 		*ToString() = 0;
+	virtual char 		*ToString();
 	/* Parsing node info from string */
-	virtual int 		FromString(char *source) = 0;
+	virtual int 		FromString(char *source);
 	
 	
 private:

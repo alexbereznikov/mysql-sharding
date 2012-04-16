@@ -13,7 +13,6 @@
 
 
 typedef	char* KeyType;			/* Temporary */
-typedef	char* NodeType;			/* Temporary */
 typedef	char* HostnameType;		/* Temporary */
 
 class	RedisConnector
