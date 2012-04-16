@@ -3,9 +3,6 @@
 
 #define	__REDIS_CONNECTOR_H__
 
-#ifdef USE_PRAGMA_INTERFACE
-#pragma interface			/* gcc class implementation */
-#endif
 
 #include <stdlib.h>
 #include <string.h>

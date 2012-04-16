@@ -29,7 +29,7 @@ public:
 	/* Getting string representation of node */
 	virtual char 		*ToString() = 0;
 	/* Parsing node info from string */
-	virtual Node 		FromString(char *source) = 0;
+	virtual int 		FromString(char *source) = 0;
 	
 	
 private:
