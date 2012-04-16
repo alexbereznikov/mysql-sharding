@@ -14,5 +14,5 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
 
 SET(SHARDING_PLUGIN_DYNAMIC "ha_sharding")
-SET(SHARDING_SOURCES ha_sharding.cc ha_sharding.h hiredis.h)
+SET(SHARDING_SOURCES ha_sharding.cc ha_sharding.h hiredis.h RedisConnector.cc RedisConnector.h)
 MYSQL_ADD_PLUGIN(sharding ${SHARDING_SOURCES} STORAGE_ENGINE MODULE_ONLY LINK_LIBRARIES hiredis)
