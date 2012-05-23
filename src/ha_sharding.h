@@ -1,4 +1,18 @@
+/*	ha_sharding.h: storage engine header file
+	Copyright (C) 2012 Bereznikov Alexey
 
+	This program is free software: you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program.  If not, see <http://www.gnu.org/licenses/>.	*/
 
 /** @file ha_example.h
 
@@ -27,7 +41,7 @@
 #include "handler.h"                     /* handler */
 #include "my_base.h"                     /* ha_rows */
 
-#include "hiredis.h"			/* interaction with redis */
+#include "Logger.h"						/* Simple log */
 
 /** @brief
   EXAMPLE_SHARE is a structure that will be shared among all open handlers.
@@ -244,4 +258,6 @@ public:
 
   THR_LOCK_DATA **store_lock(THD *thd, THR_LOCK_DATA **to,
                              enum thr_lock_type lock_type);     ///< required
+  
+  Logger log("/var/log/sharding.log");
 };

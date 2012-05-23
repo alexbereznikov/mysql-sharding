@@ -1,4 +1,4 @@
-/*	SingleNode.cc: contains stuff for working with single mysql nodes
+/*	Logger.h: contains declaration of logger class
 	Copyright (C) 2012 Bereznikov Alexey
 
 	This program is free software: you can redistribute it and/or modify
@@ -14,48 +14,31 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.	*/
 
+#ifndef	__LOG_H__
+
+#define	__LOG_H__
+
 #ifdef USE_PRAGMA_INTERFACE
 #pragma interface			/* gcc class implementation */
 #endif
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-#include "SingleNode.h"
-
-SingleNode::SingleNode()
+class	Logger
 {
-	_address = NULL;
-}
-
-SingleNode::SingleNode(char *source)
-{
-	FromString(source);
-}
-
-SingleNode::~SingleNode()
-{
+public:
+	Logger(){};
+    Logger(char *path);
+    ~Logger();
+    
+    void	Log(char *message);
 	
-}
+private:
+    FILE	*f;
 
-MYSQL_RESULT	SingleNode::ProcessCommand(char *command)
-{
-	return	(MYSQL_RESULT)NULL;	/* TEMPORARY */
-}
+};
 
-char	*SingleNode::ToString()
-{
-	if (_address == NULL)
-		return	NULL;
-	char	*temp = (char*)calloc(strlen(_address) + 1, 1);
-	strncpy(temp, _address, strlen(_address));
-	return	temp;
-}
+#endif
 
-int		SingleNode::FromString(char *source)
-{
-	/*  TODO: add some checks */
-	_address = (char*)calloc(strlen(source) + 1, 1);
-	strncpy(_address, source, strlen(source));
-	return	1;
-}

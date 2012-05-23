@@ -1,4 +1,18 @@
+/*	ha_sharding.cc: storage engine main source file
+	Copyright (C) 2012 Bereznikov Alexey
 
+	This program is free software: you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program.  If not, see <http://www.gnu.org/licenses/>.	*/
 
 /**
   @file ha_example.cc
@@ -109,6 +123,8 @@ mysql_mutex_t sharding_mutex;
 static uchar* sharding_get_key(SHARDING_SHARE *share, size_t *length,
                              my_bool not_used __attribute__((unused)))
 {
+	log.Log("sharding_get_key");
+	
   *length=share->table_name_length;
   return (uchar*) share->table_name;
 }
@@ -124,6 +140,9 @@ static PSI_mutex_info all_sharding_mutexes[]=
 
 static void init_sharding_psi_keys()
 {
+	
+	log.Log("sharding_psi_keys");
+	
   const char* category= "sharding";
   int count;
 
@@ -139,6 +158,8 @@ static void init_sharding_psi_keys()
 static int sharding_init_func(void *p)
 {
   DBUG_ENTER("sharding_init_func");
+  
+  log.Log("sharding_init_func");
 
 #ifdef HAVE_PSI_INTERFACE
   init_sharding_psi_keys();
@@ -161,6 +182,8 @@ static int sharding_done_func(void *p)
 {
   int error= 0;
   DBUG_ENTER("sharding_done_func");
+  
+  log.Log("sharding_done_func");
 
   if (sharding_open_tables.records)
     error= 1;
@@ -184,6 +207,8 @@ static SHARDING_SHARE *get_share(const char *table_name, TABLE *table)
   SHARDING_SHARE *share;
   uint length;
   char *tmp_name;
+  
+  log.Log("get_share");
 
   mysql_mutex_lock(&sharding_mutex);
   length=(uint) strlen(table_name);
@@ -233,6 +258,9 @@ error:
 
 static int free_share(SHARDING_SHARE *share)
 {
+	
+	log.Log("free_share");
+	
   mysql_mutex_lock(&sharding_mutex);
   if (!--share->use_count)
   {
@@ -250,12 +278,15 @@ static handler* sharding_create_handler(handlerton *hton,
                                        TABLE_SHARE *table, 
                                        MEM_ROOT *mem_root)
 {
+	log.Log("sharding_create_handler");
   return new (mem_root) ha_sharding(hton, table);
 }
 
 ha_sharding::ha_sharding(handlerton *hton, TABLE_SHARE *table_arg)
   :handler(hton, table_arg)
-{}
+{
+	//log.Log("ha_sharding");
+}
 
 
 /**
@@ -281,7 +312,6 @@ static const char *ha_sharding_exts[] = {
 };
 
 const char **ha_sharding::bas_ext() const
-{
   return ha_sharding_exts;
 }
 
@@ -306,6 +336,8 @@ int ha_sharding::open(const char *name, int mode, uint test_if_locked)
 {
   DBUG_ENTER("ha_sharding::open");
 
+  log.Log("open");
+  
   if (!(share = get_share(name, table)))
     DBUG_RETURN(1);
   thr_lock_data_init(&share->lock,&lock,NULL);
@@ -332,6 +364,7 @@ int ha_sharding::open(const char *name, int mode, uint test_if_locked)
 
 int ha_sharding::close(void)
 {
+	log.Log("close");
   DBUG_ENTER("ha_sharding::close");
   DBUG_RETURN(free_share(share));
 }
@@ -370,6 +403,8 @@ int ha_sharding::close(void)
 int ha_sharding::write_row(uchar *buf)
 {
   DBUG_ENTER("ha_sharding::write_row");
+  
+  log.Log("write_row");
   /*
     Example of a successful write_row. We don't store the data
     anywhere; they are thrown away. A real implementation will
@@ -404,6 +439,8 @@ int ha_sharding::write_row(uchar *buf)
 */
 int ha_sharding::update_row(const uchar *old_data, uchar *new_data)
 {
+	
+	log.Log("update_row");
 
   DBUG_ENTER("ha_sharding::update_row");
   DBUG_RETURN(HA_ERR_WRONG_COMMAND);
@@ -433,6 +470,7 @@ int ha_sharding::update_row(const uchar *old_data, uchar *new_data)
 int ha_sharding::delete_row(const uchar *buf)
 {
   DBUG_ENTER("ha_sharding::delete_row");
+  log.Log("delete_row");
   DBUG_RETURN(HA_ERR_WRONG_COMMAND);
 }
 
@@ -451,6 +489,7 @@ int ha_sharding::index_read_map(uchar *buf, const uchar *key,
 {
   int rc;
   DBUG_ENTER("ha_sharding::index_read");
+  log.Log("index_read_map");
   MYSQL_INDEX_READ_ROW_START(table_share->db.str, table_share->table_name.str);
   rc= HA_ERR_WRONG_COMMAND;
   MYSQL_INDEX_READ_ROW_DONE(rc);
@@ -467,6 +506,7 @@ int ha_sharding::index_next(uchar *buf)
 {
   int rc;
   DBUG_ENTER("ha_sharding::index_next");
+  log.Log("index_next");
   MYSQL_INDEX_READ_ROW_START(table_share->db.str, table_share->table_name.str);
   rc= HA_ERR_WRONG_COMMAND;
   MYSQL_INDEX_READ_ROW_DONE(rc);
@@ -483,6 +523,7 @@ int ha_sharding::index_prev(uchar *buf)
 {
   int rc;
   DBUG_ENTER("ha_sharding::index_prev");
+  log.Log("index_prev");
   MYSQL_INDEX_READ_ROW_START(table_share->db.str, table_share->table_name.str);
   rc= HA_ERR_WRONG_COMMAND;
   MYSQL_INDEX_READ_ROW_DONE(rc);
@@ -504,6 +545,7 @@ int ha_sharding::index_first(uchar *buf)
 {
   int rc;
   DBUG_ENTER("ha_sharding::index_first");
+  log.Log("index_first");
   MYSQL_INDEX_READ_ROW_START(table_share->db.str, table_share->table_name.str);
   rc= HA_ERR_WRONG_COMMAND;
   MYSQL_INDEX_READ_ROW_DONE(rc);
@@ -525,6 +567,7 @@ int ha_sharding::index_last(uchar *buf)
 {
   int rc;
   DBUG_ENTER("ha_sharding::index_last");
+  log.Log("index_last");
   MYSQL_INDEX_READ_ROW_START(table_share->db.str, table_share->table_name.str);
   rc= HA_ERR_WRONG_COMMAND;
   MYSQL_INDEX_READ_ROW_DONE(rc);
@@ -548,12 +591,14 @@ int ha_sharding::index_last(uchar *buf)
 int ha_sharding::rnd_init(bool scan)
 {
   DBUG_ENTER("ha_sharding::rnd_init");
+  log.Log("rnd_init");
   DBUG_RETURN(HA_ERR_WRONG_COMMAND);
 }
 
 int ha_sharding::rnd_end()
 {
   DBUG_ENTER("ha_sharding::rnd_end");
+  log.Log("rnd_end");
   DBUG_RETURN(0);
 }
 
@@ -576,6 +621,7 @@ int ha_sharding::rnd_next(uchar *buf)
 {
   int rc;
   DBUG_ENTER("ha_sharding::rnd_next");
+  log.Log("rnd_next");
   MYSQL_READ_ROW_START(table_share->db.str, table_share->table_name.str,
                        TRUE);
   rc= HA_ERR_END_OF_FILE;
@@ -608,6 +654,7 @@ int ha_sharding::rnd_next(uchar *buf)
 void ha_sharding::position(const uchar *record)
 {
   DBUG_ENTER("ha_sharding::position");
+  log.Log("position");
   DBUG_VOID_RETURN;
 }
 
@@ -629,6 +676,7 @@ int ha_sharding::rnd_pos(uchar *buf, uchar *pos)
 {
   int rc;
   DBUG_ENTER("ha_sharding::rnd_pos");
+  log.Log("rnd_pos");
   MYSQL_READ_ROW_START(table_share->db.str, table_share->table_name.str,
                        TRUE);
   rc= HA_ERR_WRONG_COMMAND;
@@ -678,6 +726,7 @@ int ha_sharding::rnd_pos(uchar *buf, uchar *pos)
 int ha_sharding::info(uint flag)
 {
   DBUG_ENTER("ha_sharding::info");
+  log.Log("info");
   DBUG_RETURN(0);
 }
 
@@ -694,6 +743,7 @@ int ha_sharding::info(uint flag)
 int ha_sharding::extra(enum ha_extra_function operation)
 {
   DBUG_ENTER("ha_sharding::extra");
+  log.Log("extra");
   DBUG_RETURN(0);
 }
 
@@ -720,6 +770,7 @@ int ha_sharding::extra(enum ha_extra_function operation)
 int ha_sharding::delete_all_rows()
 {
   DBUG_ENTER("ha_sharding::delete_all_rows");
+  log.Log("delete_all_rows");
   DBUG_RETURN(HA_ERR_WRONG_COMMAND);
 }
 
@@ -743,6 +794,7 @@ int ha_sharding::delete_all_rows()
 int ha_sharding::truncate()
 {
   DBUG_ENTER("ha_sharding::truncate");
+  log.Log("truncate");
   DBUG_RETURN(HA_ERR_WRONG_COMMAND);
 }
 
@@ -767,6 +819,7 @@ int ha_sharding::truncate()
 int ha_sharding::external_lock(THD *thd, int lock_type)
 {
   DBUG_ENTER("ha_sharding::external_lock");
+  log.Log("external_lock");
   DBUG_RETURN(0);
 }
 
@@ -812,6 +865,7 @@ THR_LOCK_DATA **ha_sharding::store_lock(THD *thd,
                                        THR_LOCK_DATA **to,
                                        enum thr_lock_type lock_type)
 {
+	log.Log("store_lock");
   if (lock_type != TL_IGNORE && lock.type == TL_UNLOCK)
     lock.type=lock_type;
   *to++= &lock;
@@ -841,6 +895,7 @@ THR_LOCK_DATA **ha_sharding::store_lock(THD *thd,
 int ha_sharding::delete_table(const char *name)
 {
   DBUG_ENTER("ha_sharding::delete_table");
+  log.Log("delete_table");
   /* This is not implemented but we want someone to be able that it works. */
   DBUG_RETURN(0);
 }
@@ -863,6 +918,7 @@ int ha_sharding::delete_table(const char *name)
 int ha_sharding::rename_table(const char * from, const char * to)
 {
   DBUG_ENTER("ha_sharding::rename_table ");
+  log.Log("rename_table");
   DBUG_RETURN(HA_ERR_WRONG_COMMAND);
 }
 
@@ -884,6 +940,7 @@ ha_rows ha_sharding::records_in_range(uint inx, key_range *min_key,
                                      key_range *max_key)
 {
   DBUG_ENTER("ha_sharding::records_in_range");
+  log.Log("records_in_range");
   DBUG_RETURN(10);                         // low number to force index usage
 }
 
@@ -911,6 +968,9 @@ int ha_sharding::create(const char *name, TABLE *table_arg,
                        HA_CREATE_INFO *create_info)
 {
   DBUG_ENTER("ha_sharding::create");
+  
+  log.Log("create");
+  
   /*
     This is not implemented but we want someone to be able to see that it
     works.

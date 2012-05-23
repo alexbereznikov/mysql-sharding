@@ -1,1 +1,4 @@
- 
+TODO:
+ * Make log system
+ * Make conversion from internal mysql query data to SQL query
+ * Make integration with mysql server
