@@ -24,7 +24,17 @@ ELSEIF()
     MESSAGE(FATAL_ERROR "libhiredis was not found")
 ENDIF()
 
+# Finding mysql library
+FIND_PATH(MYSQL_INCLUDE_DIR driver/mysql_public_iface.h)
+	    
+# Including mysql library
+IF (MYSQL_INCLUDE_DIR)
+    INCLUDE_DIRECTORIES("${MYSQL_INCLUDE_DIR}/driver")
+ELSEIF()
+    MESSAGE(FATAL_ERROR "mysql c++ connector was not found")
+ENDIF()
+
 # mysql plugin stuff
 SET(SHARDING_PLUGIN_DYNAMIC "ha_sharding")
-SET(SHARDING_SOURCES src/ha_sharding.cc src/ha_sharding.h src/RedisConnector.cc src/RedisConnector.h)
+SET(SHARDING_SOURCES src/ha_sharding.cc src/ha_sharding.h src/RedisConnector.cc src/RedisConnector.h src/MysqlConnector.cc src/MysqlConnector.h)
 MYSQL_ADD_PLUGIN(sharding ${SHARDING_SOURCES} STORAGE_ENGINE MODULE_ONLY LINK_LIBRARIES hiredis)
