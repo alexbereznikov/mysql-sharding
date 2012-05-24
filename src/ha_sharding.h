@@ -41,8 +41,6 @@
 #include "handler.h"                     /* handler */
 #include "my_base.h"                     /* ha_rows */
 
-#include "Logger.h"						/* Simple log */
-
 /** @brief
   EXAMPLE_SHARE is a structure that will be shared among all open handlers.
   This example implements the minimum of what you will probably need.
@@ -67,6 +65,7 @@ public:
   ~ha_sharding()
   {
   }
+  
 
   /** @brief
     The name that will be used for display purposes.
@@ -259,5 +258,5 @@ public:
   THR_LOCK_DATA **store_lock(THD *thd, THR_LOCK_DATA **to,
                              enum thr_lock_type lock_type);     ///< required
   
-  Logger log("/var/log/sharding.log");
+  
 };

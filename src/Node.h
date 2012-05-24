@@ -33,20 +33,20 @@ typedef char* MYSQL_RESULT;
 class Node
 {
 public:
-	Node();
-	Node(char*);
-	~Node();
+	Node() {};
+	Node(char*) {};
+	virtual ~Node() {};
 	
 	/* mysql process command routine */
-	virtual MYSQL_RESULT	ProcessCommand(char *command);	
+	virtual MYSQL_RESULT	ProcessCommand(char *command) {};	
 	
 	
 	/* Getting type of node */
-	virtual NodeType	GetType();
+	virtual NodeType	GetType() {};
 	/* Getting string representation of node */
-	virtual char 		*ToString();
+	virtual char 		*ToString() {};
 	/* Parsing node info from string */
-	virtual int 		FromString(char *source);
+	virtual int 		FromString(char *source) {};
 	
 	
 private:

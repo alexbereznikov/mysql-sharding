@@ -26,5 +26,5 @@ ENDIF()
 
 # mysql plugin stuff
 SET(SHARDING_PLUGIN_DYNAMIC "ha_sharding")
-SET(SHARDING_SOURCES src/ha_sharding.cc src/ha_sharding.h src/RedisConnector.cc src/RedisConnector.h src/Logger.cc src/Logger.h)
+SET(SHARDING_SOURCES src/ha_sharding.cc src/ha_sharding.h src/RedisConnector.cc src/RedisConnector.h)
 MYSQL_ADD_PLUGIN(sharding ${SHARDING_SOURCES} STORAGE_ENGINE MODULE_ONLY LINK_LIBRARIES hiredis)
