@@ -1,4 +1,9 @@
 
+24.05.2012 03:00
+	- Removed unused Logger class
+	+ Added debug output using DBUG package
+	* Some bugs fixed
+
 23.05.2012 20:45
 	* Plugin source structured to comply with GNU GPL standarts
 	* License information added
